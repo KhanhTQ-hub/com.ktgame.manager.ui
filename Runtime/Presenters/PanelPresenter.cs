@@ -7,16 +7,16 @@ namespace com.ktgame.manager.ui
 		protected PanelPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer,
 			viewConfig) { }
 
-		public void Show(SortingLayerId? sortingLayer = null, int? orderInLayer = null)
+		public void Show(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playShowAnimation = true)
 		{
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config);
+			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playShowAnimation);
 		}
 
-		public UniTask ShowAsync(SortingLayerId? sortingLayer = null, int? orderInLayer = null)
+		public UniTask ShowAsync(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playShowAnimation = true)
 		{
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config);
+			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playShowAnimation);
 		}
 
 		public void Hide(bool playHideAnimation = true)
@@ -40,23 +40,22 @@ namespace com.ktgame.manager.ui
 		}
 	}
 
-	public abstract class PanelPresenter<TPanelView, TDataSource> : WindowPresenter<TPanelView, TDataSource>, IPanelPresenter<TDataSource>
-		where TPanelView : PanelView where TDataSource : IViewDataSource
+	public abstract class PanelPresenter<TPanelView, TDataSource> : WindowPresenter<TPanelView, TDataSource>, IPanelPresenter<TDataSource> where TPanelView : PanelView where TDataSource : IViewDataSource
 	{
 		protected PanelPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer, viewConfig) { }
 
-		public void Show(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null)
+		public void Show(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playHideAnimation = true)
 		{
 			DataSource = dataSource;
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config);
+			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playHideAnimation);
 		}
 
-		public UniTask ShowAsync(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null)
+		public UniTask ShowAsync(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playHideAnimation = true)
 		{
 			DataSource = dataSource;
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config);
+			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playHideAnimation);
 		}
 
 		public void Hide(bool playHideAnimation = true)

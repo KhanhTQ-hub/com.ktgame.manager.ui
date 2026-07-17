@@ -26,19 +26,19 @@ namespace com.ktgame.manager.ui
 			_panelViews.Clear();
 		}
 
-		public void Show<TPanelView>(IWindowPresenter presenter, PanelViewConfig config) where TPanelView : PanelView
+		public void Show<TPanelView>(IWindowPresenter presenter, PanelViewConfig config, bool playAnimation) where TPanelView : PanelView
 		{
-			ShowAndForget<TPanelView>(presenter, config).Forget();
+			ShowAndForget<TPanelView>(presenter, config, playAnimation).Forget();
 		}
 
-		private async UniTask ShowAndForget<TPanelView>(IWindowPresenter presenter, PanelViewConfig config) where TPanelView : PanelView
+		private async UniTask ShowAndForget<TPanelView>(IWindowPresenter presenter, PanelViewConfig config, bool playAnimation) where TPanelView : PanelView
 		{
-			await ShowAsyncInternal<TPanelView>(presenter, config);
+			await ShowAsyncInternal<TPanelView>(presenter, config, playAnimation);
 		}
 
-		public async UniTask ShowAsync<TPanelView>(IWindowPresenter presenter, PanelViewConfig config) where TPanelView : PanelView
+		public async UniTask ShowAsync<TPanelView>(IWindowPresenter presenter, PanelViewConfig config, bool playAnimation = true) where TPanelView : PanelView
 		{
-			await ShowAsyncInternal<TPanelView>(presenter, config);
+			await ShowAsyncInternal<TPanelView>(presenter, config, playAnimation);
 		}
 
 		public void Hide(IWindowPresenter presenter, bool playAnimation = true)
@@ -71,7 +71,7 @@ namespace com.ktgame.manager.ui
 			await HideAllAsyncInternal(playAnimation);
 		}
 
-		private async UniTask ShowAsyncInternal<TPanelView>(IWindowPresenter presenter, PanelViewConfig config) where TPanelView : PanelView
+		private async UniTask ShowAsyncInternal<TPanelView>(IWindowPresenter presenter, PanelViewConfig config, bool playAnimation) where TPanelView : PanelView
 		{
 			var assetPath = config.Config.AssetPath;
 			if (assetPath == null)
@@ -101,7 +101,7 @@ namespace com.ktgame.manager.ui
 			
 			await panelView.BeforeEnterAsync(true);
 
-			await panelView.EnterAsync(true, config.Config.PlayAnimation);
+			await panelView.EnterAsync(true, playAnimation);
 
 			_panelViews.Add(presenter, new ViewRef<PanelView>(panelView, presenter.ViewConfig.AssetPath, config.Config.PoolingPolicy));
 			

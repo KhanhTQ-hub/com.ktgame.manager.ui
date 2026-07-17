@@ -104,19 +104,19 @@ namespace com.ktgame.manager.ui
 			}
 		}
 
-		public void Show<TModalView>(ModalViewConfig config) where TModalView : ModalView
+		public void Show<TModalView>(ModalViewConfig config, bool playAnimation) where TModalView : ModalView
 		{
-			ShowAndForget<TModalView>(config).Forget();
+			ShowAndForget<TModalView>(config, playAnimation).Forget();
 		}
 
-		private async UniTaskVoid ShowAndForget<TModalView>(ModalViewConfig config) where TModalView : ModalView
+		private async UniTaskVoid ShowAndForget<TModalView>(ModalViewConfig config, bool playAnimation) where TModalView : ModalView
 		{
-			await ShowAsyncInternal<TModalView>(config);
+			await ShowAsyncInternal<TModalView>(config, playAnimation);
 		}
 
-		public async UniTask ShowAsync<TModalView>(ModalViewConfig config) where TModalView : ModalView
+		public async UniTask ShowAsync<TModalView>(ModalViewConfig config, bool playAnimation) where TModalView : ModalView
 		{
-			await ShowAsyncInternal<TModalView>(config);
+			await ShowAsyncInternal<TModalView>(config, playAnimation);
 		}
 
 		public void Hide(bool playAnimation)
@@ -164,7 +164,7 @@ namespace com.ktgame.manager.ui
 			await HideAllAsyncInternal(playAnimation);
 		}
 
-		private async UniTask ShowAsyncInternal<TModalView>(ModalViewConfig config) where TModalView : ModalView
+		private async UniTask ShowAsyncInternal<TModalView>(ModalViewConfig config, bool playAnimation) where TModalView : ModalView
 		{
 			var resourcePath = config.Config.AssetPath;
 			if (resourcePath == null)
@@ -211,10 +211,10 @@ namespace com.ktgame.manager.ui
 
 			if (backdrop)
 			{
-				animTasks.Add(backdrop.EnterAsync(config.Config.PlayAnimation));
+				animTasks.Add(backdrop.EnterAsync(playAnimation));
 			}
 
-			animTasks.Add(modalView.EnterAsync(true, config.Config.PlayAnimation));
+			animTasks.Add(modalView.EnterAsync(true, playAnimation));
 
 			await UniTask.WhenAll(animTasks);
 

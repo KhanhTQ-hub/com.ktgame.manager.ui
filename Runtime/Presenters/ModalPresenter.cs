@@ -7,18 +7,18 @@ namespace com.ktgame.manager.ui
 		protected ModalPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer,
 			viewConfig) { }
 
-		public void Show(float? backdropAlpha = null, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
+		public void Show(float? backdropAlpha = null, bool playShowAnimation = true, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
 		{
 			var config = new ModalViewConfig((ViewConfig)ViewConfig, backdropAlpha: backdropAlpha, closeWhenClickOnBackdrop: closeWhenClickOnBackdrop,
 				modalBackdropAssetPath: backdropAssetPath);
-			ViewContainer.As<ModalContainer>().Show<TModalView>(config);
+			ViewContainer.As<ModalContainer>().Show<TModalView>(config, playShowAnimation);
 		}
 
-		public UniTask ShowAsync(float? backdropAlpha = null, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
+		public UniTask ShowAsync(float? backdropAlpha = null, bool playShowAnimation = true, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
 		{
 			var config = new ModalViewConfig((ViewConfig)ViewConfig, backdropAlpha: backdropAlpha, closeWhenClickOnBackdrop: closeWhenClickOnBackdrop,
 				modalBackdropAssetPath: backdropAssetPath);
-			return ViewContainer.As<ModalContainer>().ShowAsync<TModalView>(config);
+			return ViewContainer.As<ModalContainer>().ShowAsync<TModalView>(config, playShowAnimation);
 		}
 
 		public void Hide(bool playAnimation = true)
@@ -58,21 +58,21 @@ namespace com.ktgame.manager.ui
 		protected ModalPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer,
 			viewConfig) { }
 
-		public void Show(TDataSource dataSource, float? backdropAlpha = null, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
+		public void Show(TDataSource dataSource, float? backdropAlpha = null, bool playShowAnimation = true, bool? closeWhenClickOnBackdrop = null, string backdropAssetPath = "")
 		{
 			DataSource = dataSource;
 			var config = new ModalViewConfig((ViewConfig)ViewConfig, backdropAlpha: backdropAlpha, closeWhenClickOnBackdrop: closeWhenClickOnBackdrop,
 				modalBackdropAssetPath: backdropAssetPath);
-			ViewContainer.As<ModalContainer>().Show<TModalView>(config);
+			ViewContainer.As<ModalContainer>().Show<TModalView>(config, playShowAnimation);
 		}
 
-		public UniTask ShowAsync(TDataSource dataSource, float? backdropAlpha = null, bool? closeWhenClickOnBackdrop = null,
+		public UniTask ShowAsync(TDataSource dataSource, float? backdropAlpha = null, bool playShowAnimation = true, bool? closeWhenClickOnBackdrop = null,
 			string backdropAssetPath = "")
 		{
 			DataSource = dataSource;
 			var config = new ModalViewConfig((ViewConfig)ViewConfig, backdropAlpha: backdropAlpha, closeWhenClickOnBackdrop: closeWhenClickOnBackdrop,
 				modalBackdropAssetPath: backdropAssetPath);
-			return ViewContainer.As<ModalContainer>().ShowAsync<TModalView>(config);
+			return ViewContainer.As<ModalContainer>().ShowAsync<TModalView>(config, playShowAnimation);
 		}
 
 		public void Hide(bool playAnimation = true)
