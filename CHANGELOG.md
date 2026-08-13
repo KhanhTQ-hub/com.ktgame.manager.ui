@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/KhanhTQ-Organization/com.ktgame.manager.ui/compare/v1.0.8...v1.0.9) (2026-08-13)
+
+
+### Bug Fixes
+
+* update ui manager ([6eed0b0](https://github.com/KhanhTQ-Organization/com.ktgame.manager.ui/commit/6eed0b096eec8b2973d5bbeb121ed66cb7683fce))
+
 ## [1.0.8](https://github.com/KhanhTQ-Organization/com.ktgame.manager.ui/compare/v1.0.7...v1.0.8) (2026-07-17)
 
 
