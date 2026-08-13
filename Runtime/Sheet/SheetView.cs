@@ -120,7 +120,12 @@ namespace com.ktgame.manager.ui
 
 			anim.Setup(RectTransform);
 
-			await anim.PlayAsync(TransitionProgressReporter);
+			await anim.PlayAsync(this.GetCancellationTokenOnDestroy(), TransitionProgressReporter);
+
+			if (anim is ScriptableObject so)
+			{
+				UnityEngine.Object.Destroy(so);
+			}
 		}
 
 		protected virtual void OnEnter()
@@ -181,7 +186,12 @@ namespace com.ktgame.manager.ui
 
 			anim.Setup(RectTransform);
 
-			await anim.PlayAsync(TransitionProgressReporter);
+			await anim.PlayAsync(this.GetCancellationTokenOnDestroy(), TransitionProgressReporter);
+
+			if (anim is ScriptableObject so)
+			{
+				UnityEngine.Object.Destroy(so);
+			}
 		}
 
 		protected virtual void OnExit()

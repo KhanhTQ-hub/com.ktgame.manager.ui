@@ -108,11 +108,16 @@ namespace com.ktgame.manager.ui
 					transition.OnAnimationBegin?.Invoke();
 				}
 
-				await anim.PlayAsync(TransitionProgressReporter);
+				await anim.PlayAsync(this.GetCancellationTokenOnDestroy(), TransitionProgressReporter);
 
 				foreach (var transition in transitions)
 				{
 					transition.OnAnimationComplete?.Invoke();
+				}
+
+				if (anim is ScriptableObject so)
+				{
+					UnityEngine.Object.Destroy(so);
 				}
 			}
 
@@ -178,11 +183,16 @@ namespace com.ktgame.manager.ui
 					transition.OnAnimationBegin?.Invoke();
 				}
 
-				await anim.PlayAsync(TransitionProgressReporter);
+				await anim.PlayAsync(this.GetCancellationTokenOnDestroy(), TransitionProgressReporter);
 
 				foreach (var transition in transitions)
 				{
 					transition.OnAnimationComplete?.Invoke();
+				}
+
+				if (anim is ScriptableObject so)
+				{
+					UnityEngine.Object.Destroy(so);
 				}
 			}
 

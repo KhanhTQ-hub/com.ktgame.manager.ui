@@ -98,8 +98,13 @@ namespace com.ktgame.manager.ui
 				var anim = GetAnimation(show);
 				anim.Setup(RectTransform);
 				transition.OnAnimationBegin?.Invoke();
-				await anim.PlayAsync(TransitionProgressReporter);
+				await anim.PlayAsync(this.GetCancellationTokenOnDestroy(), TransitionProgressReporter);
 				transition.OnAnimationComplete?.Invoke();
+
+				if (anim is ScriptableObject so)
+				{
+					UnityEngine.Object.Destroy(so);
+				}
 			}
 
 			RectTransform.FillParent(Parent);

@@ -7,26 +7,26 @@ namespace com.ktgame.manager.ui
 		protected PanelPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer,
 			viewConfig) { }
 
-		public void Show(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playShowAnimation = true)
+		public void Show(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool? playShowAnimation = null)
 		{
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playShowAnimation);
+			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playShowAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public UniTask ShowAsync(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playShowAnimation = true)
+		public UniTask ShowAsync(SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool? playShowAnimation = null)
 		{
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playShowAnimation);
+			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playShowAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public void Hide(bool playHideAnimation = true)
+		public void Hide(bool? playHideAnimation = null)
 		{
-			ViewContainer.As<PanelContainer>().Hide(this, playHideAnimation);
+			ViewContainer.As<PanelContainer>().Hide(this, playHideAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public UniTask HideAsync(bool playHideAnimation = true)
+		public UniTask HideAsync(bool? playHideAnimation = null)
 		{
-			return ViewContainer.As<PanelContainer>().HideAsync(this, playHideAnimation);
+			return ViewContainer.As<PanelContainer>().HideAsync(this, playHideAnimation ?? ViewConfig.PlayAnimation);
 		}
 
 		protected override void Initialize(TPanelView view)
@@ -44,28 +44,28 @@ namespace com.ktgame.manager.ui
 	{
 		protected PanelPresenter(IUIManager uiManager, IViewContainer viewContainer, IViewConfig viewConfig) : base(uiManager, viewContainer, viewConfig) { }
 
-		public void Show(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playHideAnimation = true)
+		public void Show(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool? playShowAnimation = null)
 		{
 			DataSource = dataSource;
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playHideAnimation);
+			ViewContainer.As<PanelContainer>().Show<TPanelView>(this, config, playShowAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public UniTask ShowAsync(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool playHideAnimation = true)
+		public UniTask ShowAsync(TDataSource dataSource, SortingLayerId? sortingLayer = null, int? orderInLayer = null, bool? playShowAnimation = null)
 		{
 			DataSource = dataSource;
 			var config = new PanelViewConfig((ViewConfig)ViewConfig, sortingLayer: sortingLayer, orderInLayer: orderInLayer);
-			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playHideAnimation);
+			return ViewContainer.As<PanelContainer>().ShowAsync<TPanelView>(this, config, playShowAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public void Hide(bool playHideAnimation = true)
+		public void Hide(bool? playHideAnimation = null)
 		{
-			ViewContainer.As<PanelContainer>().Hide(this, playHideAnimation);
+			ViewContainer.As<PanelContainer>().Hide(this, playHideAnimation ?? ViewConfig.PlayAnimation);
 		}
 
-		public UniTask HideAsync(bool playHideAnimation = true)
+		public UniTask HideAsync(bool? playHideAnimation = null)
 		{
-			return ViewContainer.As<PanelContainer>().HideAsync(this, playHideAnimation);
+			return ViewContainer.As<PanelContainer>().HideAsync(this, playHideAnimation ?? ViewConfig.PlayAnimation);
 		}
 
 		protected override void Initialize(TPanelView view)

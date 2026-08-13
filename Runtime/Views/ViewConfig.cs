@@ -2,7 +2,7 @@ using System;
 
 namespace com.ktgame.manager.ui
 {
-	public struct ViewConfig : IViewConfig
+	public class ViewConfig : IViewConfig
 	{
 		public bool LoadAsync { get; }
 		public bool PlayAnimation { get; }

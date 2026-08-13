@@ -202,10 +202,26 @@ namespace com.ktgame.manager.ui
 			return false;
 		}
 
+		private View[] _cachedChildViews;
+
 		protected TPresenter AddChild<TPresenter, TView>() where TPresenter : IViewPresenter where TView : View
 		{
+			if (_cachedChildViews == null)
+			{
+				_cachedChildViews = View.Owner.GetComponentsInChildren<View>(true);
+			}
+
+			TView view = null;
+			foreach (var v in _cachedChildViews)
+			{
+				if (v is TView tv)
+				{
+					view = tv;
+					break;
+				}
+			}
+
 			var type = typeof(TPresenter);
-			var view = View.Owner.GetComponentInChildren<TView>(true);
 			var presenter = (TPresenter)Activator.CreateInstance(type, UIManager, view);
 			presenter.Parent = this;
 			Children.Add(presenter);
@@ -214,20 +230,31 @@ namespace com.ktgame.manager.ui
 
 		protected TPresenter AddChild<TPresenter, TView>(string viewName) where TPresenter : IViewPresenter where TView : View
 		{
-			var type = typeof(TPresenter);
-			var views = View.Owner.GetComponentsInChildren<TView>(true);
-			foreach (var view in views)
+			if (_cachedChildViews == null)
 			{
-				if (view.Name.Equals(viewName))
+				_cachedChildViews = View.Owner.GetComponentsInChildren<View>(true);
+			}
+
+			TView view = null;
+			foreach (var v in _cachedChildViews)
+			{
+				if (v is TView tv && tv.Name.Equals(viewName))
 				{
-					var presenter = (TPresenter)Activator.CreateInstance(type, UIManager, view);
-					presenter.Parent = this;
-					Children.Add(presenter);
-					return presenter;
+					view = tv;
+					break;
 				}
 			}
 
-			throw new InvalidOperationException($"View {viewName} not found in {View.GetType().Name}");
+			if (view == null)
+			{
+				throw new InvalidOperationException($"View {viewName} not found in {View.GetType().Name}");
+			}
+
+			var type = typeof(TPresenter);
+			var presenter = (TPresenter)Activator.CreateInstance(type, UIManager, view);
+			presenter.Parent = this;
+			Children.Add(presenter);
+			return presenter;
 		}
 
 		private void OnViewLoaded(IView view)

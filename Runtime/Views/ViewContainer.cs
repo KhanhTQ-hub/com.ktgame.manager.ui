@@ -187,15 +187,53 @@ namespace com.ktgame.manager.ui
 
 		public TView GetView<TView>(IViewConfig config) where TView : View
 		{
-			var tcs = new UniTaskCompletionSource<TView>();
-			GetViewAndForget(config, tcs).Forget();
-			return tcs.GetResult(0);
-		}
+			var assetPath = config.AssetPath;
+			var poolingPolicy = config.PoolingPolicy;
 
-		private async UniTaskVoid GetViewAndForget<TView>(IViewConfig config, UniTaskCompletionSource<TView> tcs) where TView : View
-		{
-			var view = await GetViewAsync<TView>(config);
-			tcs.TrySetResult(view);
+			if (GetFromPool<TView>(assetPath, poolingPolicy, out var existView))
+			{
+				existView.Settings = Settings;
+				return existView;
+			}
+
+			if (config.LoadAsync)
+			{
+				Debug.LogError($"[ViewContainer] Cannot call synchronous GetView for `{assetPath}` when LoadAsync is true. Use GetViewAsync instead.");
+				return null;
+			}
+
+			AssetRequest<GameObject> assetRequest;
+			if (_assetPathToRequest.TryGetValue(assetPath, out var request))
+			{
+				assetRequest = request;
+				if (!assetRequest.IsDone)
+				{
+					Debug.LogError($"[ViewContainer] An async load request for `{assetPath}` is already in progress. Cannot perform synchronous load.");
+					return null;
+				}
+			}
+			else
+			{
+				assetRequest = AssetLoader.Load<GameObject>(assetPath);
+				_assetPathToRequest[assetPath] = assetRequest;
+			}
+
+			if (assetRequest.Status == AssetRequestStatus.Failed)
+			{
+				throw assetRequest.OperationException;
+			}
+
+			var instance = Instantiate(assetRequest.Result);
+			instance.name = instance.name.Replace("(Clone)", string.Empty);
+
+			if (instance.TryGetComponent<TView>(out var view) == false)
+			{
+				Debug.LogError($"Cannot find the {typeof(TView).Name} component on the specified resource `{assetPath}`.", instance);
+				return null;
+			}
+
+			view.Settings = Settings;
+			return view;
 		}
 
 		public async UniTask<T> GetViewAsync<T>(IViewConfig config) where T : View

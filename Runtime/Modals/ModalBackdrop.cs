@@ -115,7 +115,12 @@ namespace com.ktgame.manager.ui
 				var anim = GetAnimation(true);
 				anim.Setup(RectTransform);
 
-				await anim.PlayAsync();
+				await anim.PlayAsync(this.GetCancellationTokenOnDestroy());
+
+				if (anim is ScriptableObject so)
+				{
+					UnityEngine.Object.Destroy(so);
+				}
 			}
 
 			RectTransform.FillParent(Parent);
@@ -132,7 +137,12 @@ namespace com.ktgame.manager.ui
 				var anim = GetAnimation(false);
 				anim.Setup(RectTransform);
 
-				await anim.PlayAsync();
+				await anim.PlayAsync(this.GetCancellationTokenOnDestroy());
+
+				if (anim is ScriptableObject so)
+				{
+					UnityEngine.Object.Destroy(so);
+				}
 			}
 
 			CanvasGroup.alpha = 0f;

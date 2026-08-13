@@ -7,7 +7,7 @@ namespace com.ktgame.manager.ui
 {
 	internal static class TransitionAnimationExtensions
 	{
-		public static async UniTask PlayAsync(this ITransitionAnimation self, IProgress<float> progress = null)
+		public static async UniTask PlayAsync(this ITransitionAnimation self, System.Threading.CancellationToken cancellationToken = default, IProgress<float> progress = null)
 		{
 			var player = new AnimationPlayer(self);
 			progress?.Report(0.0f);
@@ -15,7 +15,7 @@ namespace com.ktgame.manager.ui
 
 			while (player.IsFinished == false)
 			{
-				await UniTask.NextFrame();
+				await UniTask.NextFrame(PlayerLoopTiming.Update, cancellationToken);
 				player.Update(Time.unscaledDeltaTime);
 				progress?.Report(player.Time / self.Duration);
 			}
